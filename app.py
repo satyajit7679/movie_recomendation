@@ -310,7 +310,7 @@ if movies is not None and similarity is not None:
     # Footer
     st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
     st.markdown(
-        "<p class='footer-text'>Made with ❤️ using Satyajit</p>",
+        "<p class='footer-text'>Made with ❤️ using Satyajit Barik</p>",
         unsafe_allow_html=True
     )
 
