@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Movie Recommender 🎬</title>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f3f4f6;
+      font-family: "Poppins", sans-serif;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 900px;
+      margin: auto;
+      padding: 2rem;
+    }
+
+    .title-text {
+      font-size: 3rem;
+      font-weight: bold;
+      background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+      margin-bottom: 1.5rem;
+    }
+
+    .movie-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 1.2rem;
+      border-radius: 12px;
+      margin: 0.6rem 0;
+      color: white;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    select {
+      width: 100%;
+      height: 3rem;
+      border-radius: 10px;
+      padding: 0.7rem;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 100%;
+      border-radius: 10px;
+      height: 3em;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: #667eea;
+      color: white;
+    }
+
+    .btn-reset {
+      background: #ddd;
+    }
+
+    footer {
+      text-align: center;
+      margin: 2rem 0;
+      color: gray;
+    }
+  </style>
+
+</head>
+<body>
+
+  <div class="container">
+
+    <h1 class="title-text">🎬 Movie Recommendation System</h1>
+    <hr />
+
+    <div class="card">
+      <h3>🎯 Select Your Favorite Movie</h3>
+
+      <!-- Dropdown -->
+      <select id="movie-select">
+        <option>Select a movie...</option>
+        <option>Avatar</option>
+        <option>The Dark Knight</option>
+        <option>Interstellar</option>
+        <option>Avengers</option>
+      </select>
+
+      <br /><br />
+
+      <div style="display: flex; gap: 10px">
+        <button class="btn-primary" onclick="getRecommendations()">🎬 Get Recommendations</button>
+        <button class="btn-reset" onclick="resetPage()">🔄 Reset</button>
+      </div>
+    </div>
+
+    <div id="results"></div>
+
+    <footer>
+      Made with ❤️ by Satyajit
+    </footer>
+
+  </div>
+
+  <script>
+    function getRecommendations() {
+      const movie = document.getElementById("movie-select").value;
+      const resultDiv = document.getElementById("results");
+
+      if (movie === "Select a movie...") {
+        alert("Please choose a movie first!");
+        return;
+      }
+
+      // ⚠️ Dummy recommendations for UI only
+      // Replace with API call later
+      const demoRecommendations = [
+        "Inception",
+        "Iron Man",
+        "Shutter Island",
+        "Batman Begins",
+        "Doctor Strange"
+      ];
+
+      resultDiv.innerHTML = `
+        <h2>🌟 Recommended Movies For You</h2>
+        ${demoRecommendations
+          .map((m, i) => `<div class="movie-card">🎥 ${i + 1}. ${m}</div>`)
+          .join("")}
+      `;
+    }
+
+    function resetPage() {
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>
