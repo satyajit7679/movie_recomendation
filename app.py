@@ -12,38 +12,173 @@ st.set_page_config(
     layout="wide"
 )
 
-# Custom CSS for better design
-st.markdown("""
+# Initialize session state for theme
+if 'dark_theme' not in st.session_state:
+    st.session_state.dark_theme = False
+
+# Custom CSS for both light and dark themes
+if st.session_state.dark_theme:
+    st.markdown("""
     <style>
     .main {
         padding: 2rem;
+        background-color: #0f0f0f;
+        color: #ffffff;
+    }
+    .stApp {
+        background-color: #0f0f0f;
     }
     .stButton>button {
         width: 100%;
         border-radius: 10px;
         height: 3em;
         font-weight: bold;
+        background-color: #6a9ee6;
+        color: white;
+        border: none;
+    }
+    .stButton>button:hover {
+        background-color: #5a8ed6;
     }
     .movie-card {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-color: #1a1a1a;
         padding: 1.5rem;
-        border-radius: 15px;
+        border-radius: 10px;
         margin: 0.5rem 0;
-        color: white;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        color: #ffffff;
+        border-left: 4px solid #6a9ee6;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
     .title-text {
         font-size: 3rem;
         font-weight: bold;
-        background: linear-gradient(120deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
+        color: #6a9ee6;
         text-align: center;
         margin-bottom: 2rem;
     }
+    .recommendation-header {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #6a9ee6;
+        text-align: center;
+        margin: 2rem 0;
+    }
+    .section-divider {
+        height: 2px;
+        background-color: #333;
+        margin: 2rem 0;
+        border: none;
+    }
+    .footer-text {
+        text-align: center;
+        color: #999;
+        font-size: 0.9rem;
+        margin-top: 2rem;
+    }
+    .recommendation-number {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        background-color: #6a9ee6;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 25px;
+        margin-right: 10px;
+        font-weight: bold;
+        color: white;
+        font-size: 0.9rem;
+    }
+    .stSelectbox div[data-baseweb="select"] {
+        background-color: #1a1a1a;
+        color: white;
+    }
+    .stSelectbox div[data-baseweb="select"] input {
+        color: white;
+    }
+    .stSelectbox div[data-baseweb="select"] svg {
+        fill: white;
+    }
+    .stSpinner > div {
+        color: #6a9ee6;
+    }
+    .stAlert {
+        background-color: #1a1a1a;
+        color: white;
+    }
     </style>
     """, unsafe_allow_html=True)
-
+else:
+    st.markdown("""
+    <style>
+    .main {
+        padding: 2rem;
+        background-color: #f8f9fa;
+    }
+    .stApp {
+        background-color: #f8f9fa;
+    }
+    .stButton>button {
+        width: 100%;
+        border-radius: 10px;
+        height: 3em;
+        font-weight: bold;
+        background-color: #4A90E2;
+        color: white;
+        border: none;
+    }
+    .stButton>button:hover {
+        background-color: #357ABD;
+    }
+    .movie-card {
+        background-color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        margin: 0.5rem 0;
+        color: #333;
+        border-left: 4px solid #4A90E2;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .title-text {
+        font-size: 3rem;
+        font-weight: bold;
+        color: #4A90E2;
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    .recommendation-header {
+        font-size: 1.8rem;
+        font-weight: bold;
+        color: #4A90E2;
+        text-align: center;
+        margin: 2rem 0;
+    }
+    .section-divider {
+        height: 2px;
+        background-color: #e0e0e0;
+        margin: 2rem 0;
+        border: none;
+    }
+    .footer-text {
+        text-align: center;
+        color: #666;
+        font-size: 0.9rem;
+        margin-top: 2rem;
+    }
+    .recommendation-number {
+        display: inline-block;
+        width: 25px;
+        height: 25px;
+        background-color: #4A90E2;
+        border-radius: 50%;
+        text-align: center;
+        line-height: 25px;
+        margin-right: 10px;
+        font-weight: bold;
+        color: white;
+        font-size: 0.9rem;
+    }
+    </style>
+    """, unsafe_allow_html=True)
 
 @st.cache_data
 def load_data():
@@ -63,8 +198,6 @@ def load_data():
     except Exception as e:
         st.error(f"Error loading data: {str(e)}")
         return None, None
-
-
 
 
 def recommend(movie, movies, similarity):
@@ -99,7 +232,6 @@ def recommend(movie, movies, similarity):
 
         recommended_movies = []
         for i in movies_list:
-
             recommended_movies.append(movies.iloc[i[0]].title)
 
         return recommended_movies
@@ -113,10 +245,18 @@ def recommend(movie, movies, similarity):
 movies, similarity = load_data()
 
 if movies is not None and similarity is not None:
+    # Theme toggle button at top right
+    col1, col2, col3 = st.columns([2, 1, 1])
+    with col3:
+        theme_label = "🌙 Switch to Dark Theme" if not st.session_state.dark_theme else "☀️ Switch to Light Theme"
+        if st.button(theme_label, key="theme_toggle"):
+            st.session_state.dark_theme = not st.session_state.dark_theme
+            st.rerun()
+
     # Header
     st.markdown('<p class="title-text">🎬 Movie Recommendation System</p>', unsafe_allow_html=True)
 
-    st.markdown("---")
+    st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
 
     # Main layout
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -151,24 +291,29 @@ if movies is not None and similarity is not None:
 
                 if recommendations:
                     st.markdown("<br>", unsafe_allow_html=True)
-                    st.markdown("### 🌟 Recommended Movies For You")
+                    st.markdown('<p class="recommendation-header">🌟 Recommended Movies For You</p>', unsafe_allow_html=True)
                     st.markdown("<br>", unsafe_allow_html=True)
 
                     for idx, movie in enumerate(recommendations, 1):
                         st.markdown(
-                            f'<div class="movie-card">🎥 {idx}. {movie}</div>',
+                            f'''
+                            <div class="movie-card">
+                                <span class="recommendation-number">{idx}</span>
+                                <span style="font-size: 1.1rem; font-weight: 600;">{movie}</span>
+                            </div>
+                            ''',
                             unsafe_allow_html=True
                         )
                 else:
                     st.warning("No recommendations found. Please try another movie.")
 
     # Footer
-    st.markdown("---")
+    st.markdown('<hr class="section-divider">', unsafe_allow_html=True)
     st.markdown(
-        "<p style='text-align: center; color: gray;'>Made with ❤️ using Satyajit</p>",
+        "<p class='footer-text'>Made with ❤️ using Satyajit</p>",
         unsafe_allow_html=True
     )
 
 else:
     st.error("⚠️ Unable to load movie data. Please check your pickle files.")
-    st.info("Make sure 'similarity.pickle' and 'movie_dict.pickle' are in the same directory as this script.")
+    st.info("Make sure 'similarity1.pickle' and 'movie_dict.pickle' are in the same directory as this script.")
