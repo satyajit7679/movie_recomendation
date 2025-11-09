@@ -14,14 +14,23 @@ Minimal & easy to run
 
 movie_recomendation/
 │── app.py # Main Streamlit app
+
 │── main.ipynb # Notebook used to create pickle files
+
 │── movie_dict.pickle # Movie metadata stored as dict
+
 │── movie.pickle # Movie data used in app
+
 │── similarity1.pickle # Precomputed similarity matrix
+
 │── tmdb_5000_movies.csv # Dataset
+
 │── tmdb_5000_credits.csv # Dataset
+
 │── requirements.txt # Dependencies
+
 │── templete/ # (Optional) template folder
+
 └── .devcontainer/ # Dev environment setup
 
 ⚙️ How It Works
