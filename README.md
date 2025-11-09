@@ -44,6 +44,7 @@ app.py loads the matrix + movie data and returns top recommendations
 🏁 Run Locally
 1️⃣ Clone
 git clone https://github.com/satyajit7679/movie_recomendation.git
+
 cd movie_recomendation
 
 2️⃣ Install
